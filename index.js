@@ -57,10 +57,7 @@ supertokens.init({
       ],
     }),
     Session.init({
-      jwt: {
-        enable: true,
-        issuer: 'https://site--auth-server--bhqk5j868m5c.code.run',
-      },
+      
       exposeAccessTokenToFrontendInCookieBasedAuth: true,
       override: {
         functions: function (originalImplementation) {
