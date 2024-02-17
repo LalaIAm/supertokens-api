@@ -7,6 +7,9 @@ const {
   middleware,
   errorHandler,
 } = require('supertokens-node/framework/express');
+const {
+  verifySession,
+} = require('supertokens-node/recipe/session/framework/express');
 const Dashboard = require('supertokens-node/recipe/dashboard');
 require('dotenv').config();
 
@@ -54,6 +57,10 @@ supertokens.init({
       ],
     }),
     Session.init({
+      jwt: {
+        enable: true,
+        issuer: 'https://site--auth-server--bhqk5j868m5c.code.run',
+      },
       exposeAccessTokenToFrontendInCookieBasedAuth: true,
       override: {
         functions: function (originalImplementation) {
@@ -95,7 +102,14 @@ app.use(middleware());
 
 app.get('/api-health', (req, res) => {
   res.send('OK');
-});
+}); 
+
+app.get('/getJWT', verifySession(), async (req, res) => {
+  let session = req.session;
+  let jwt = session.getAccessTokenPayload()["jwt"]
+
+  res.json({token: jwt})
+})
 
 app.use(errorHandler());
 
